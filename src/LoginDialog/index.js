@@ -6,27 +6,31 @@ import * as firebase from 'firebase/app';
 class LoginDialog extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: 'kobi',phoneNumber:''};
+    this.state = {userName: '',phoneNumber:'',isValidated: false,imageData: null};
     // this.validateName = this.validateName.bind(this);
     // this.validatePhoneNumber = this.validatePhoneNumber.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   getInitialState() {
    return {
-     name: '',
-     phoneNumber: ''
+     userName: '',
+     phoneNumber: '',
+     isValidated: false,
+     imageData: null
    };
  }
  handleChange(e) {
    //this.setState({e.target.name: e.target.value});
    let stateName = e.target.name;
-   let stateVal = e.target.val;
-   this.setState({stateName: stateVal});
-   if (this.state.name.length>0 && this.state.phoneNumber.length>0){
-      //enable button
-   }
+   let stateVal = e.target.value;
+   this.setState({[stateName]: stateVal});
+  }
+  isValid(){
+    if (this.state.userName.length>0 && this.state.phoneNumber.length>0){
+       return true;
 
-    //this.state.newVal(e.target.value);
+    }
+    return false;
   }
   render(){
     return(
@@ -41,18 +45,18 @@ class LoginDialog extends Component {
             type="tel"
             placeholder="Enter your phone number"
             pattern="[0-9]"
-            onChange={this.handleChange}
+            onChange={this.handleChange.bind(this)}
             />
           </p>
           <p>
-            <input name="name"
-            id="name"
+            <input name="userName"
+            id="userName"
             className="login-credentials"
             type="text"
             placeholder="Enter your name"
-            onChange={this.handleChange}/>
+            onChange={this.handleChange.bind(this)}/>
           </p>
-          <button className="button button-big login-button" onClick={this.login} disabled={!this.state.name.length>=0}>Login</button>
+          <button className="button button-big login-button" onClick={this.login.bind(this)} disabled={!this.isValid()} >Login</button>
         </div>
         <div className="login-dialog-validations">
           <ol>
@@ -65,7 +69,22 @@ class LoginDialog extends Component {
     );
   }
   login(){
-    console.log("logging..");
+      firebase.initializeApp({
+     apiKey: 'AIzaSyC3EaZqKldK4cz9lYGkLHh5NmPvICL-vVQ',
+     authDomain: 'wazzapp-4b5cf.firebaseapp.com',
+     databaseURL: 'https://wazzapp-4b5cf.firebaseio.com',
+     projectId: 'wazzapp-4b5cf',
+     storageBucket: 'wazzapp-4b5cf.appspot.com',
+     messagingSenderId: '452145776981'
+   });
+   window.localStorage.setItem('wazzapp-user', JSON.stringify(this.state));
+    firebase.database().ref(`users/${this.state.phoneNumber}`).update({
+      userName: this.state.userName,
+      phoneNumber: this.state.phoneNumber,
+      imageData: this.state.imageData
+    }).then((res) => {
+      console.log(res);
+    });
   }
 
 

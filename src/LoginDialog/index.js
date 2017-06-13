@@ -32,10 +32,18 @@ class LoginDialog extends Component {
     }
     return false;
   }
+  captureSuccess(imageData) {
+     this.setState({
+       imageData
+     });
+   }
   render(){
     return(
       <div>
         <div className="login-dialog-container">
+        <div className="profile-capture">
+          <LoginImageCapture onCapture={this.captureSuccess.bind(this)} />
+        </div>
           <h3 className="login-dialog-title">WazzApp</h3>
           <p className="login-dialog-subtitle">Use WazzApp, create your profile picture and enter your name</p>
           <p>
@@ -82,8 +90,8 @@ class LoginDialog extends Component {
       userName: this.state.userName,
       phoneNumber: this.state.phoneNumber,
       imageData: this.state.imageData
-    }).then((res) => {
-      console.log(res);
+    }).then(() => {
+      console.log("data was successfully pushed");
     });
   }
 

@@ -7,7 +7,12 @@ import 'firebase/database';
 import PropTypes from 'prop-types';
 
 class AppShell extends Component {
+  render() {
+    return (
+       <Login />
 
+    )
+  }
 }
 
 AppShell.childContextTypes = {

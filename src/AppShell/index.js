@@ -10,7 +10,6 @@ class AppShell extends Component {
   render() {
     return (
        <Login />
-       <div></div>
 
     )
   }
